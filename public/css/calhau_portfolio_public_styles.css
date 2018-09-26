@@ -1,0 +1,10 @@
+.portfolio-item .ui.card {
+    box-shadow: none !important
+}
+.portfolio-item .ui.card .content {
+    font-weight: 600
+}
+
+.portfolio-item .ui.card .content .header {
+    padding: 7px 0
+}

@@ -1,0 +1,54 @@
+.calhau-portfolio-wrapper {
+    margin: 25px 15px
+}
+.calhau-portfolio-wrapper .ui.header {
+    margin-bottom: 15px
+}
+.calhau-portfolio-wrapper .ui.header .big.dashicons{
+    font-size: 2.12em;
+    width: 50px;
+    height: 40px;
+}
+
+.pull-right {
+    float: right;
+}
+
+.ui.calhau.form .ui.grid label.styled{
+    padding-top: 25px
+}
+
+.ui.calhau.form .ui.big.icon.button {
+    padding: 15px 0 32px
+}
+
+.calhau-portfolio-wrapper .ui.basic.button {
+    padding: 10px 15px 25px
+}
+.calhau-portfolio-wrapper .ui.card .content small.meta{
+    font-size: 0.85em
+}
+.calhau-portfolio-wrapper .ui.card .content .header{
+    margin: 5px 0 10px !important
+}
+.calhau-portfolio-wrapper .ui.card.portfolio .content {
+    min-height: 160px
+}
+
+.ui.calhau.form .ui.input input[type="number"] {
+    padding: 20px
+}
+.ui.calhau.form .portfolio-upload {
+    height: 270px;
+    overflow: hidden;
+    position: relative;
+}
+.ui.calhau.form .portfolio-upload .jcrop-active,
+.ui.calhau.form .portfolio-upload canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+#portfolioImage{
+    height: 270px;
+}
