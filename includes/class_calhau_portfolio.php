@@ -1,7 +1,8 @@
 <?php
 
 // Including Autoloader
-require ABSPATH . "vendor/autoload.php";
+$path = str_replace( ["\includes", "/includes"], "", __DIR__ );
+require $path . "/vendor/autoload.php";
 
 use WideImage\WideImage;
 
@@ -324,7 +325,7 @@ class CalhauPortfolio
             if(count( $referer  == 2)) {
                 $referer = $referer[0] . "&action=manage";
             } else {
-                $referer = wp_get_referer();
+                $referer = $referer[0];
             }
 
             wp_safe_redirect( $referer . "&result=ok" );	
