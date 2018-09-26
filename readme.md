@@ -16,5 +16,6 @@ This is a simple plugin for creating a portfolio.
 ### Installation
 
 It's needed to download the PHP dependencies by running composer and generating the autoloader file.
+Using the terminal, navigate under the plugin folder and execute the command below:
 
-**Run**: composer install
+> composer install
