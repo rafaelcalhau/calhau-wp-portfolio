@@ -1,6 +1,5 @@
 ## Calhau's Portfolio
 
-- **Plugin Name**:       Calhau's Portfolio
 - **Plugin URI**:        https://calhau.me
 - **Author**:            Rafael Calhau
 - **Author URI**:        https://calhau.me
