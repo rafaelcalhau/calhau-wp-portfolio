@@ -15,6 +15,7 @@ This is a simple plugin for creating a portfolio.
 
 ### Installation
 
-It's needed to download the dependencies by running composer and generating the autoloader file.
+It's needed to download the PHP and NPM dependencies by running composer and generating the autoloader file and npm install.
 
 **Run**: composer install
+**Run**: npm install
