@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name:       Calhau's Portfolio
+Plugin Name:       Calhau WP Portfolio
 Description:       Plugin
 Plugin URI:        https://calhau.me
 Author:            Rafael Calhau
