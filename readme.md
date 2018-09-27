@@ -18,4 +18,41 @@ This is a simple plugin for creating a portfolio.
 It's needed to download the PHP dependencies by running composer and generating the autoloader file.
 Using the terminal, navigate under the plugin folder and execute the command below:
 
-> composer install
+```sh
+$ composer install
+```
+### How To Use
+
+In order to show the portfolio on your page, you only need to put this shortcode:
+
+> [block-portfolio]
+
+# Features
+
+  - Import a image form your device
+  - Image Crop
+  - Rich-text editor
+  - Ordering item's position
+
+
+### Tech
+
+Calhau WP Portfolio uses a number of open source projects to work properly:
+
+* [Jcrop] - jQuery Image Cropping Plugin
+* [jQuery] - fast, small, and feature-rich JavaScript library
+* [TinyMCE] - awesome web-based rich-text editor
+
+And of course Dillinger itself is open source with a [public repository][rafaelcalhau]
+ on GitHub.
+
+License
+----
+
+GNU 2.0
+
+
+**Free Software, Hell Yeah!**
+
+   [rafaelcalhau]: <https://github.com/rafaelcalhau/calhau-wp-portfolio>
+   
