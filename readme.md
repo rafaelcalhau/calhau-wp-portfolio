@@ -29,7 +29,7 @@ In order to show the portfolio on your page, you only need to put this shortcode
 
 # Features
 
-  - Import a image form your device
+  - Import a image from your device
   - Image Crop
   - Rich-text editor
   - Ordering item's position
