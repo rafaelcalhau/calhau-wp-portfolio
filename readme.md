@@ -1,4 +1,4 @@
-## Calhau's Portfolio
+## Calhau WP Portfolio
 
 - **Plugin URI**:        https://calhau.me
 - **Author**:            Rafael Calhau
