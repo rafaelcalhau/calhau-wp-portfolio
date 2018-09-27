@@ -49,7 +49,7 @@ And of course Dillinger itself is open source with a [public repository][rafaelc
 License
 ----
 
-GNU 2.0
+GPL 2.0
 
 
 **Free Software, Hell Yeah!**
