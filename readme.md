@@ -27,7 +27,7 @@ In order to show the portfolio on your page, you only need to put this shortcode
 
 > [block-portfolio]
 
-# Features
+## Features
 
   - Import a image from your device
   - Image Crop
