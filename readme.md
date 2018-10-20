@@ -43,9 +43,6 @@ Calhau WP Portfolio uses a number of open source projects to work properly:
 * [jQuery] - fast, small, and feature-rich JavaScript library
 * [TinyMCE] - awesome web-based rich-text editor
 
-And of course Dillinger itself is open source with a [public repository][rafaelcalhau]
- on GitHub.
-
 License
 ----
 
