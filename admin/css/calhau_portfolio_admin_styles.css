@@ -1,3 +1,15 @@
+/*
+* Plugin Name:       Calhau WP Portfolio
+* Description:       Plugin for creating a simple portfolio to wordpress websites.
+* Plugin URI:        https://calhau.me
+* Author:            Rafael Calhau
+* Author URI:        https://calhau.me
+* Tags:              portfolio
+* Version:           1.1
+* Text Domain:       calhau-portfolio
+* License:           GNU Public License 2.0
+*/
+
 .calhau-portfolio-wrapper {
     margin: 25px 15px
 }

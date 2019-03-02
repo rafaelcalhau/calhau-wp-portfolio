@@ -58,13 +58,28 @@ class CalhauPortfolio
         add_action( "admin_post_calhau_portfolio_update_item", [$this, "item_update"] );
 
         // loads the admin styles for this plugin
-        self::enqueueAdminStyle();
+        add_action( 'admin_enqueue_scripts', [$this, "enqueueAdminStyle"] );
 
         // loads the public styles for this plugin
-        self::enqueuePublicStyle();
+        add_action( 'wp_footer', [$this, "enqueuePublicScripts"] );
 
         // handles the portfolio's shortcode for giving life to the portfolio on front-end
         add_filter( "the_content", [$this, "handleShortcode"] );
+
+        // rest api
+        add_action( "rest_api_init", function() {
+            register_rest_route( "calhau-portfolio/v1/", "/item/(?P<id>\d+)", [
+                "methods" => 'GET',
+                "callback" => [$this, "apiGetPortfolioItem"],
+                "args" => [
+                    "id" => [
+                        "validate_callback" => function($param, $request, $key) {
+                            return is_numeric( $param );
+                        }
+                    ]
+                ]
+            ] );
+        } );
         
     }
 
@@ -84,6 +99,30 @@ class CalhauPortfolio
             "dashicons-laptop",
             2
         );
+    }
+
+    /**
+     * Returns a portfolio item data from an API request
+     *
+     * @param WP_REST_Request $request
+     * @return mixed
+     */
+    public function apiGetPortfolioItem(WP_REST_Request $request)
+    {
+        global $wpdb;
+
+        $id = (int) $request['id'];
+        $item = $wpdb->get_row(
+			"SELECT * FROM ". CALHAU_TBL_PORTFOLIO ." WHERE id = '{$id}' "
+        );
+
+        if (empty( $item ))
+        {
+            return null;
+        }
+
+        return $item;
+        
     }
 
     /**
@@ -188,7 +227,7 @@ class CalhauPortfolio
     public function enqueueAdminStyle()
 	{
         $styleName = 'calhau_portfolio_admin_styles';
-        $url = plugins_url( '/admin/css/'. $styleName .'.css', __FILE__ );
+        $url = plugins_url( '/admin/css/'. $styleName .'.css', dirname(__FILE__) );
 
         self::loadFileStyle($styleName, $url);
     }
@@ -198,12 +237,16 @@ class CalhauPortfolio
      *
      * @return void
      */
-    public function enqueuePublicStyle()
+    public function enqueuePublicScripts()
 	{
-        $styleName = 'calhau_portfolio_public_styles';
-        $url = plugins_url( '/public/css/'. $styleName .'.css', __FILE__ );    
-        
-        self::loadFileStyle($styleName, $url);
+        $url = plugins_url( '/public/css/calhau_portfolio_public_styles.css', dirname(__FILE__) );    
+        self::loadFileStyle('calhau_portfolio_public_styles', $url); 
+
+        $url = plugins_url( '/public/js/calhau_portfolio_public_scripts.js', dirname(__FILE__) ); 
+        self::loadFileScript('calhau_portfolio_public_scripts', $url);
+
+        $url = plugins_url( '/public/js/webapp.js', dirname(__FILE__) ); 
+        self::loadFileScript('webapp', $url);
     }
 
     /**
@@ -249,9 +292,7 @@ class CalhauPortfolio
                     '<div class="eight wide tablet five wide computer column portfolio-item">'.
                     '   <div class="ui fluid card">'.
                     '       <div class="image">'.
-                    '           <a href="'. $item->project_url .'">'.
-                    '               <img src="../uploads/portfolio/normal/'. $item->filename .'" class="ui fluid image">'.
-                    '           </a>'.
+                    '           <img src="../uploads/portfolio/normal/'. $item->filename .'" class="ui fluid image">'.
                     '       </div>'.
                     '       <div class="content">'.
                     '           <small class="meta">'.
@@ -261,7 +302,13 @@ class CalhauPortfolio
                     '           <div class="description">'. $item->short_description .'</div>'.
                     '       </div>'.
                     '       <div class="extra content">'.
-                    '           <a target="_blank" href="'. $item->project_url .'" class="pull-right">Visit</a>'.
+                    '           <a data-id="'. $item->id .'" href="javascript:;" rel="portfolio-modal" class="pull-left">+ more</a> ';
+
+                if ($item->project_url !== "") {
+                    $html .= ' <a target="_blank" href="'. $item->project_url .'" class="pull-right">visit</a>';
+                }
+                    
+                $html .=
                     '       </div>'.
                     '   </div>'.
                     '</div>';
@@ -502,7 +549,7 @@ class CalhauPortfolio
                 "UPDATE ". CALHAU_TBL_PORTFOLIO ." SET ".
                 " project_name = '{$data["project_name"]}', ".
                 " project_url = '{$data["project_url"]}', ".
-                " resume = '{$data["resume"]}', ".
+                " short_description = '{$data["short_description"]}', ".
                 " description = '{$data["description"]}', ".
                 " ordering = '{$data["ordering"]}', ".
                 " published_at = '{$data["published_at"]}' ".
@@ -569,6 +616,27 @@ class CalhauPortfolio
 
         }
     }
+
+    /**
+     * Enqueue the speciefied css file from an url
+     *
+     * @param string $scriptFile
+     * @param string $url
+     * @return void
+     */
+    public function loadFileScript(string $scriptFile, string $url)
+    {
+        $url = str_replace("includes/", "", $url);
+
+        if ($fp = curl_init($url)) {
+            wp_enqueue_script( $scriptFile, $url );
+        } else {
+            wp_die(
+                "The specified js file does not exist: \n".
+                $file
+            );
+        }
+    }
     
     /**
      * Enqueue the speciefied css file from an url
@@ -594,7 +662,8 @@ class CalhauPortfolio
      *
      * @return void
      */
-    public function noticeItemAdded(){
+    public function noticeItemAdded()
+    {
         echo '<div class="notice notice-success is-dismissable">';
         echo '  <p>'+ _e('Nice!', 'Item added successfully.', 'calhau-portfolio') +'</p>';
         echo '</div>';

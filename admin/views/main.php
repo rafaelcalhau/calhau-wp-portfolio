@@ -24,7 +24,7 @@
     <div class="ui divider"></div>
 
     <?php 
-        if( isset( $formProcessed ) and $formProcessed == 'ok' ) {
+        if( isset( $del ) and $del === true ) {
             echo '<div class="ui positive message">';
             echo '  <i class="close icon is-dismissable"></i>';
             echo '  <div class="header">';
@@ -71,7 +71,7 @@
                         <a href="?page=<?=$page?>&action=edit&item_id=<?=$item->id?>" class="ui basic left floated button">
                             <i class="edit icon"></i> Edit
                         </a>
-                        <a href="?page=<?=$page?>&action=delete&item_id=<?=$item->id?>" class="ui basic left floated bt-delete button">
+                        <a href="?page=<?=$page?>&action=manage&item_id=<?=$item->id?>&del=true" class="ui basic left floated bt-delete button">
                             <i class="trash icon"></i> Delete
                         </a>
                         <div class="right floated author">

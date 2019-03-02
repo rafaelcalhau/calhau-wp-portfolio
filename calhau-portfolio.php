@@ -1,17 +1,14 @@
 <?php
 /*
 Plugin Name:       Calhau WP Portfolio
-Description:       Plugin
+Description:       Plugin for creating a simple portfolio to wordpress websites.
 Plugin URI:        https://calhau.me
 Author:            Rafael Calhau
 Author URI:        https://calhau.me
-Tags:              calhau, portfolio
-Version:           1.0
-Stable tag:        1.0
+Tags:              portfolio
+Version:           1.1
 Text Domain:       calhau-portfolio
-Domain Path:       /languages
-License:           Copyrighted
-License URI:       
+License:           GNU Public License 2.0
 */
 
 // If this file is called directly, abort.
@@ -59,11 +56,18 @@ function calhau_portfolio_main_page() {
 		return;
 	}
 
+	$action = isset($_GET['action']) ? $_GET['action'] : "manage";
+	$del = !empty($_GET['del']) ? true : false;
+	$formProcessed = isset($_GET['result']) ? $_GET['result'] : "";
+	$item_id = isset($_GET['item_id']) ? (int) $_GET['item_id'] : null;
+	$page = isset($_GET['page']) ? $_GET['page'] : "";
+
 	// Plugin's path
 	$pluginsPath = plugin_dir_path( __FILE__ );
 
 	// Importing CalhauViews class
 	require $pluginsPath . 'includes/class_calhau_views.php';
+	$CalhauViews = new CalhauViews();
 
 	// Nonce
 	$nonce = wp_create_nonce( 'calhau_add_meta_form_nonce' ); 
@@ -75,14 +79,17 @@ function calhau_portfolio_main_page() {
 		$pluginsPath = str_replace( "\\", "/", $pluginsPath );
 	}
 
-	$action = isset($_GET['action']) ? $_GET['action'] : "manage";
-	$formProcessed = isset($_GET['result']) ? $_GET['result'] : "";
-	$item_id = isset($_GET['item_id']) ? (int) $_GET['item_id'] : null;
-	$page = isset($_GET['page']) ? $_GET['page'] : "";
+	if ($action == 'manage') {
 
-	$CalhauViews = new CalhauViews();
+		if ($del === true and $item_id != null) {
 
-	if($action == 'manage') {
+			if($CalhauPortfolio->item_exists( $item_id )) {
+				$CalhauPortfolio->item_delete( $item_id );
+			} else {
+				$del = false;
+			}
+	
+		}
 
 		// Portfolio's Items
 		$items = $wpdb->get_results(
@@ -92,14 +99,14 @@ function calhau_portfolio_main_page() {
 		);
 		
 		$CalhauViews->view( "admin.views.main", [
-			"formProcessed" => $formProcessed,
+			"del" => $del,
 			"items" => $items,
 			"nonce" => $nonce,
 			"page" => $page,
 			"pluginPath" => str_replace( ABSPATH, "", $pluginsPath )
 		]);
 
-	} elseif($action == 'edit' and $item_id != null) {
+	} elseif ($action == 'edit' and $item_id != null) {
 
 		// Portfolio's Item
 		$item = $wpdb->get_row(
@@ -108,12 +115,10 @@ function calhau_portfolio_main_page() {
 			"WHERE a.id = '{$item_id}' "
 		);
 
-		if($item == null) {
-			if ( wp_get_referer() ) {
-				wp_safe_redirect( wp_get_referer() . "&result=ok" );
-			} else {
-				wp_safe_redirect( get_home_url() );
-			}
+		if ($item == null) 
+		{
+			wp_safe_redirect( get_home_url() );
+			exit();
 		}
 
 		$CalhauViews->view( "admin.views.edit", [
@@ -123,14 +128,6 @@ function calhau_portfolio_main_page() {
 			"page" => $page,
 			"pluginPath" => str_replace( ABSPATH, "", $pluginsPath )
 		]);
-
-	} elseif($action == 'delete' and $item_id != null) {
-
-		if($CalhauPortfolio->item_exists( $item_id )) {
-			$CalhauPortfolio->item_delete( $item_id );
-		} else {
-			wp_die( "This item does not exists." );
-		}
 
 	}
 	

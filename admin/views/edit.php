@@ -78,7 +78,7 @@
                     <label class="four wide styled column">Resume</label>
                     <div class="twelve wide column">
                         <div class="field">
-                            <textarea name="short_description" id="short_description" rows="4"><?=$item->resume?></textarea>
+                            <textarea name="short_description" id="short_description" rows="4"><?=$item->short_description?></textarea>
                         </div>
                     </div>
 
@@ -153,38 +153,35 @@
         })
 
         tinymce.init({
-            selector: 'textarea.tinymce',
-            height: 300,
-            menubar: false,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor textcolor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code help wordcount'
+            selector: ".tinymce",
+            height: 500,
+            theme: 'modern',
+            plugins: 'code preview powerpaste searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount tinymcespellchecker a11ychecker imagetools mediaembed  linkchecker contextmenu colorpicker textpattern help',
+            toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+            image_advtab: true,
+            templates: [
+                { title: 'Test template 1', content: 'Test 1' },
+                { title: 'Test template 2', content: 'Test 2' }
             ],
-            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            content_css: ['//fonts.googleapis.com/css?family=Lato:300,300i,400,400i']
+            extended_valid_elements: 'img[class=myclass|!src|border:0|alt|title|width|height|style],i[class|title],span[class|title]',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css',
+                '//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.2/semantic.min.css'
+            ]
         });
-
 
         file.on('change', function() {
             readFile(this);
         });
 
         form.on('submit', function(e) {
-            if(file.val() === "") {
-                alertify.alert("Please select an image in your device.");
-                return false;
-            }
-            else if(fileData.val() !== "" && fileInfo.val() === "") {
+            if(file.val() !== "" && fileData.val() !== "" && fileInfo.val() === "") {
                 alertify.alert("Please select the cropping area for your image.");
                 return false;
             }
             else if(projectName.val().length <= 1) {
                 alertify.alert("Please enter your project's name.");
-                return false;
-            }
-            else if(projectUrl.val().length <= 1) {
-                alertify.alert("Please enter your project's url.");
                 return false;
             }
             else if(projectShortDescription.val().length <= 1) {
@@ -213,7 +210,7 @@
                         .attr('src', e.target.result)
                         .Jcrop({
                             aspectRatio: 16 / 10,
-                            onSelect: showCoords
+                            //onSelect: showCoords
                         }, function(){
 
                             hasJcropInitiated = true;
@@ -227,10 +224,11 @@
             }
         }
 
+        /*
         function showCoords(c)
         {
             console.log("data: "+ JSON.stringify(c));
             fileInfo.val(JSON.stringify(c));
-        };
+        };*/
     })
 </script>
